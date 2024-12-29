@@ -3,6 +3,8 @@ import telebot
 import schedule
 import os
 
+message_time = os.environ.get("TIME")
+
 myBot = telebot.TeleBot(os.environ.get("TOKEN"))
 
 
@@ -32,7 +34,7 @@ def send_stat():
     myBot.send_message(chat_id, message)
 
 
-schedule.every().day.at('17:30').do(send_stat)
+schedule.every().day.at(str(message_time)).do(send_stat)
 
 while True:
     schedule.run_pending()
