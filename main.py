@@ -4,6 +4,9 @@ import schedule
 import time
 import os
 import logging
+from apscheduler.schedulers.blocking import BlockingScheduler
+from threading import Thread
+
 
 message_time = os.environ.get("TIME")
 chat_id = os.environ.get("CHAT_ID")
@@ -45,11 +48,18 @@ def send_stat():
         
     myBot.send_message(chat_id, message)
 
-schedule.every(10).seconds.do(send_stat)
-#schedule.every().hour.at(":10").do(send_stat)  - not working
+scheduler = BlockingScheduler(timezone="Europe/Berlin") 
+scheduler.add_job(run_scheduled_task, "cron", hour=23)
 
-while True:  
-    schedule.run_pending() 
-    time.sleep(1)
+#schedule.every(10).seconds.do(send_stat)
+#schedule.every().day.at(":10").do(send_stat)  - not working
 
-myBot.infinity_polling()
+def schedule_checker():
+    while True:
+        scheduler.start()
+
+Thread(target=schedule_checker).start() # Notice that you refer to schedule_checker function which starts the job
+
+myBot.polling() # Also notice that you need to include polling to allow your bot to get commands from you. But it should happen AFTER threading!
+
+#myBot.infinity_polling()
