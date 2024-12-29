@@ -55,6 +55,7 @@ scheduler.add_job(run_scheduled_task, "cron", hour=23)
 #schedule.every().day.at(":10").do(send_stat)  - not working
 
 def schedule_checker():
+    
     while True:
         scheduler.start()
 
