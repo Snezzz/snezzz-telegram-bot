@@ -39,13 +39,13 @@ def get_stat():
 def send_stat():
     currentStat = get_stat()
     message = 'На интернет счете сегодня: {currentStat} р.'
-    if currentStat < 100:
+    if float(currentStat) < 100.0:
         message+= 'Пора класть деньги!' 
         
     myBot.send_message(chat_id, message)
 
 
-schedule.every(2).seconds.do(send_stat)  
+schedule.every(5).seconds.do(send_stat)  
 
 while True:  
     schedule.run_pending() 
