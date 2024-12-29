@@ -34,8 +34,8 @@ def get_stat():
     startValue = os.environ.get("STARTVALUE")
     currentValue = startValue - everyDayCost
     os.environ["STARTVALUE"] = currentValue
-    return str(currentValue)
-
+   # return str(currentValue)
+    return 'ггг'
 
 def send_stat():
     currentStat = get_stat()
