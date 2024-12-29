@@ -25,7 +25,7 @@ def startMessage(message):
 
 @myBot.message_handler(commands=['get_stat'])
 def getStatMessage(message):
-    myBot.send_message(message.chat.id, send_stat())
+    myBot.send_message(message.chat.id, "ггг")
 
 
 def get_stat():
@@ -47,8 +47,8 @@ def send_stat():
 
 schedule.every().day.at(str(message_time)).do(send_stat)
 
-while True:
-    schedule.run_pending()
-    time.sleep(5)
+#while True:
+ #   schedule.run_pending()
+  #  time.sleep(5)
 
 myBot.infinity_polling()
