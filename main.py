@@ -45,7 +45,7 @@ def send_stat():
         
     myBot.send_message(chat_id, message)
 
-schedule.every().every(10).seconds.do(send_stat)
+schedule.every(10).seconds.do(send_stat)
 #schedule.every().hour.at(":10").do(send_stat)  - not working
 
 while True:  
