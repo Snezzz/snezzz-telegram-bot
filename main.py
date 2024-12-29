@@ -49,7 +49,7 @@ def send_stat():
     myBot.send_message(chat_id, message)
 
 scheduler = BlockingScheduler(timezone="Europe/Berlin") 
-scheduler.add_job(run_scheduled_task, "cron", hour=23)
+scheduler.add_job(send_stat, "cron", hour=23)
 
 #schedule.every(10).seconds.do(send_stat)
 #schedule.every().day.at(":10").do(send_stat)  - not working
