@@ -45,7 +45,7 @@ def send_stat():
     myBot.send_message(chat_id, message)
 
 
-schedule.every().day.at(str(message_time)).do(send_stat)
+schedule.every().day.at('19:10').do(send_stat)
 
 while True:
     schedule.run_pending()
