@@ -10,6 +10,11 @@ myBot = telebot.TeleBot(os.environ.get("TOKEN"))
 def startMessage(message):
     myBot.send_message(message.chat.id, "Hello, world!")
 
+@myBot.message_handler(commands=['get_stat'])
+def startMessage(message):
+    myBot.send_message(message.chat.id, send_stat())
+
+
 def get_stat():
     everyDayCost = os.environ.get("EVERYDAYCOST")
     startValue = os.environ.get("STARTVALUE")
