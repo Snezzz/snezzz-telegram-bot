@@ -32,10 +32,9 @@ def getStatMessage(message):
 def get_stat():
     everyDayCost = os.environ.get("EVERYDAYCOST")
     startValue = os.environ.get("STARTVALUE")
-    currentValue = startValue - everyDayCost
+    currentValue = float(startValue) - float(everyDayCost)
     os.environ["STARTVALUE"] = currentValue
-   # return str(currentValue)
-    return 'ггг'
+    return str(currentValue)
 
 def send_stat():
     currentStat = get_stat()
