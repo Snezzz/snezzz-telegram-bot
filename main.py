@@ -3,8 +3,18 @@ import telebot
 import schedule
 import time
 import os
+import logging
 
 message_time = os.environ.get("TIME")
+
+# Enable logging
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logger = logging.getLogger(__name__)
+
 
 myBot = telebot.TeleBot(os.environ.get("TOKEN"))
 
@@ -14,7 +24,7 @@ def startMessage(message):
     myBot.send_message(message.chat.id, "Hello, world!")
 
 @myBot.message_handler(commands=['get_stat'])
-def startMessage(message):
+def getStatMessage(message):
     myBot.send_message(message.chat.id, send_stat())
 
 
