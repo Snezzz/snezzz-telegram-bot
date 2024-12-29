@@ -6,7 +6,7 @@ import os
 import logging
 
 message_time = os.environ.get("TIME")
-CHANNEL_NAME = '@Snezzzz_bot'
+chat_id = 12345
 
 # Enable logging
 logging.basicConfig(
@@ -43,7 +43,7 @@ def send_stat():
     if float(currentStat) < 100.0:
         message+= 'Пора класть деньги!' 
         
-    myBot.send_message(CHANNEL_NAME, message)
+    myBot.send_message(chat_id, message)
 
 
 schedule.every(5).seconds.do(send_stat)  
