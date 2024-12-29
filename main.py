@@ -45,10 +45,9 @@ def send_stat():
     myBot.send_message(chat_id, message)
 
 
-#schedule.every().day.at('19:10').do(send_stat)
+schedule.every(2).seconds.do(send_stat)  
 
-#while True:
- #   schedule.run_pending()
-  #  time.sleep(5)
+while True:  
+    schedule.run_pending() 
 
 myBot.infinity_polling()
