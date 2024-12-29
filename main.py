@@ -6,6 +6,7 @@ import os
 import logging
 
 message_time = os.environ.get("TIME")
+chat_id = os.environ.get("CHAT_ID")
 
 # Enable logging
 logging.basicConfig(
