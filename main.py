@@ -1,6 +1,7 @@
 
 import telebot
 import schedule
+import time
 import os
 
 message_time = os.environ.get("TIME")
