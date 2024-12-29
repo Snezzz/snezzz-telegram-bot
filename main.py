@@ -6,7 +6,6 @@ import os
 import logging
 
 message_time = os.environ.get("TIME")
-chat_id = 12345
 
 # Enable logging
 logging.basicConfig(
@@ -22,7 +21,7 @@ myBot = telebot.TeleBot(os.environ.get("TOKEN"))
 
 @myBot.message_handler(commands=['start'])
 def startMessage(message):
-    myBot.send_message(message.chat.id, "Hello, world!")
+    myBot.send_message(message.chat.id, "Hello, world!"+message.chat.id)
 
 @myBot.message_handler(commands=['get_stat'])
 def getStatMessage(message):
