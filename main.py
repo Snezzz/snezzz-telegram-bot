@@ -47,8 +47,8 @@ def send_stat():
 
 schedule.every().day.at(str(message_time)).do(send_stat)
 
-#while True:
- #   schedule.run_pending()
-  #  time.sleep(5)
+while True:
+    schedule.run_pending()
+    time.sleep(5)
 
 myBot.infinity_polling()
