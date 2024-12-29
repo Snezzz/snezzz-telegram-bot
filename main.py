@@ -33,7 +33,7 @@ def get_stat():
     everyDayCost = os.environ.get("EVERYDAYCOST")
     startValue = os.environ.get("STARTVALUE")
     currentValue = float(startValue) - float(everyDayCost)
-    os.environ["STARTVALUE"] = currentValue
+    os.environ["STARTVALUE"] = str(currentValue)
     return str(currentValue)
 
 def send_stat():
