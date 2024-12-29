@@ -25,7 +25,8 @@ def startMessage(message):
 
 @myBot.message_handler(commands=['get_stat'])
 def getStatMessage(message):
-    myBot.send_message(message.chat.id, "ггг")
+    val = get_stat()
+    myBot.send_message(message.chat.id, str(val))
 
 
 def get_stat():
