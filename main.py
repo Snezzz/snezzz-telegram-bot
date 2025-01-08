@@ -31,7 +31,7 @@ def startMessage(message):
     myBot.send_message(message.chat.id, "Привет! Я твой бот-помощник", reply_markup=markup)
 
 
-@bot.message_handler(content_types=['text'])
+@myBot.message_handler(content_types=['text'])
 def get_text_messages(message):
 
     if message.text == '👋 Поздороваться':
