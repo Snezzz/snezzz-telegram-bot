@@ -1,13 +1,14 @@
 
 import telebot
 import schedule
+import pymongo
 import time
 import os
 import logging
 from apscheduler.schedulers.blocking import BlockingScheduler
 from threading import Thread
 from telebot import types
-
+from pymongo import MongoClient
 
 message_time = os.environ.get("TIME")
 chat_id = os.environ.get("CHAT_ID")
@@ -32,6 +33,17 @@ def startMessage(message):
     myBot.send_message(message.chat.id, "Привет! Я твой бот-помощник", reply_markup=markup)
 
 
+@myBot.message_handler(commands=['test'])
+def testMessage(message):
+    client = MongoClient(
+    host = '27017/TCP',
+    serverSelectionTimeoutMS = 3000, # 3 second timeout
+    username=os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME"),
+    password=os.environ.get("MONGO_MONGO_INITDB_ROOT_PASSWORD"),
+    )
+    myBot.send_message(message.chat.id, client.list_database_names())
+
+
 @myBot.message_handler(content_types=['text'])
 def get_text_messages(message):
 
@@ -54,7 +66,6 @@ def get_stat():
     everyDayCost = os.environ.get("EVERYDAYCOST")
     startValue = os.environ.get("STARTVALUE")
     currentValue = float(startValue) - float(everyDayCost)
-    os.environ["STARTVALUE"] = str(currentValue)
     return str(currentValue)
 
 def send_stat():
