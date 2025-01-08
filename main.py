@@ -55,7 +55,7 @@ def getStatMessage(message):
 def get_stat():
     everyDayCost = os.environ.get("EVERYDAYCOST")
     currentValue = float(startValue) - float(everyDayCost)
-    if countADay = 0
+    if countADay == 0
         startValue = str(currentValue)
     countADay = countADay + 1
     return str(currentValue)
