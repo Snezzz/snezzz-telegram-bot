@@ -6,6 +6,7 @@ import os
 import logging
 from apscheduler.schedulers.blocking import BlockingScheduler
 from threading import Thread
+from telebot import types
 
 
 message_time = os.environ.get("TIME")
