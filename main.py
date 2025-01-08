@@ -53,7 +53,7 @@ def getStatMessage(message):
 def get_stat():
     everyDayCost = os.environ.get("EVERYDAYCOST")
     startValue = os.environ.get("STARTVALUE")
-    os.system('dockhost environment variable set --name STARTVALUE --value 22')
+    os.system('environment variable set --name STARTVALUE --value 22')
    # currentValue = float(startValue) - float(everyDayCost)
     return str(startValue)
 
