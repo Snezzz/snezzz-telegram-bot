@@ -11,7 +11,6 @@ from telebot import types
 
 message_time = os.environ.get("TIME")
 chat_id = os.environ.get("CHAT_ID")
-startValue = os.environ.get("STARTVALUE")
 countADay = 0
 
 # Enable logging
@@ -54,6 +53,7 @@ def getStatMessage(message):
 
 def get_stat():
     everyDayCost = os.environ.get("EVERYDAYCOST")
+    startValue = os.environ.get("STARTVALUE")
     currentValue = float(startValue) - float(everyDayCost)
     if countADay == 0:
         startValue = str(currentValue)
