@@ -25,7 +25,23 @@ myBot = telebot.TeleBot(os.environ.get("TOKEN"))
 
 @myBot.message_handler(commands=['start'])
 def startMessage(message):
-    myBot.send_message(message.chat.id, "Hello, world!")
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1 = types.KeyboardButton("👋 Поздороваться")
+    markup.add(btn1)
+    myBot.send_message(message.chat.id, "Привет! Я твой бот-помощник", reply_markup=markup)
+
+
+@bot.message_handler(content_types=['text'])
+def get_text_messages(message):
+
+    if message.text == '👋 Поздороваться':
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
+        btn1 = types.KeyboardButton('Получить остаток интернет-счета')
+        markup.add(btn1)
+        myBot.send_message(message.from_user.id, '❓ Задайте интересующий вас вопрос', reply_markup=markup) #ответ бота
+
+    elif message.text == 'Получить остаток интернет-счета':
+        getStatMessage(message)
 
 @myBot.message_handler(commands=['get_stat'])
 def getStatMessage(message):
@@ -42,17 +58,14 @@ def get_stat():
 
 def send_stat():
     currentStat = get_stat()
-    message = 'На интернет счете сегодня: ' + str(currentStat) + ' р.'
+    message = 'На интернет-счете сегодня: ' + str(currentStat) + ' р.'
     if float(currentStat) < 100.0:
         message+= 'Пора класть деньги!' 
         
     myBot.send_message(chat_id, message)
 
 scheduler = BlockingScheduler(timezone="Europe/Moscow") 
-scheduler.add_job(send_stat, "cron", hour=18, minute='10')
-
-#schedule.every(10).seconds.do(send_stat)
-#schedule.every().day.at(":10").do(send_stat)  - not working
+scheduler.add_job(send_stat, "cron", hour=9)
 
 def schedule_checker():
     
@@ -62,5 +75,3 @@ def schedule_checker():
 Thread(target=schedule_checker).start() # Notice that you refer to schedule_checker function which starts the job
 
 myBot.polling() # Also notice that you need to include polling to allow your bot to get commands from you. But it should happen AFTER threading!
-
-#myBot.infinity_polling()
