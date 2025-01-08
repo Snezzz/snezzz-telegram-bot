@@ -53,9 +53,9 @@ def getStatMessage(message):
 def get_stat():
     everyDayCost = os.environ.get("EVERYDAYCOST")
     datafile = open("data.txt", "w+")
-    startValue = datafile.read()
-    currentValue = float(startValue) - float(everyDayCost)
-    return str(currentValue)
+    startValue = datafile.readline() 
+   # currentValue = float(startValue) - float(everyDayCost)
+    return str(startValue)
 
 def send_stat():
     currentStat = get_stat()
