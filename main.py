@@ -11,6 +11,8 @@ from telebot import types
 
 message_time = os.environ.get("TIME")
 chat_id = os.environ.get("CHAT_ID")
+startValue = os.environ.get("STARTVALUE")
+countADay = 0
 
 # Enable logging
 logging.basicConfig(
@@ -52,12 +54,14 @@ def getStatMessage(message):
 
 def get_stat():
     everyDayCost = os.environ.get("EVERYDAYCOST")
-    startValue = os.environ.get("STARTVALUE")
-    os.system('environment variable set --name STARTVALUE --value 22')
-   # currentValue = float(startValue) - float(everyDayCost)
-    return str(startValue)
+    currentValue = float(startValue) - float(everyDayCost)
+    if countADay = 0
+        startValue = str(currentValue)
+    countADay = countADay + 1
+    return str(currentValue)
 
 def send_stat():
+    countADay = 0
     currentStat = get_stat()
     message = 'На интернет-счете сегодня: ' + str(currentStat) + ' р.'
     if float(currentStat) < 100.0:
