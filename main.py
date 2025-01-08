@@ -36,7 +36,7 @@ def startMessage(message):
 @myBot.message_handler(commands=['test'])
 def testMessage(message):
     client = MongoClient(
-    host = '27017/TCP',
+    host = 'mongodb://27017/TCP',
     serverSelectionTimeoutMS = 3000, # 3 second timeout
     username=os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME"),
     password=os.environ.get("MONGO_MONGO_INITDB_ROOT_PASSWORD"),
