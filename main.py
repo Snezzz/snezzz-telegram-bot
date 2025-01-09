@@ -57,6 +57,7 @@ def createData(message):
     password=password,
     )
     db = client.admin
+    db.create_collection("internetData")
     newCollection = db["internetData"]
     newDocument = {
         "name": "остаток",
