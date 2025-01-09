@@ -59,13 +59,23 @@ def createData(message):
          myBot.send_message(message.chat.id, f"Ошибка в создании документа {err=}")
 
 
+@myBot.message_handler(commands=['getList'])
+def getList(message):
+    client = connectToDB()
+    db = client.admin
+    currentCollection = db["internetData"]
+    answer = ""
+    for doc in currentCollection.find():
+        answer = answer + str(doc["name"]) + " : " + str(doc["cost"])
+    myBot.send_message(message.chat.id, answer)
+    
 @myBot.message_handler(commands=['removeData'])
 def removeData(message):
     client = connectToDB()
     db = client.admin
     currentCollection = db["internetData"]
     try:
-        currentCollection.remove({"name": "остаток"})
+        currentCollection.delete_many({"name": "остаток"})
         myBot.send_message(message.chat.id, 'Я очистил данные')
     except OSError as err:
         myBot.send_message(message.chat.id, f"Ошибка в очистке данных {err=}")
