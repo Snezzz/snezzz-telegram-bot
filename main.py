@@ -36,7 +36,7 @@ def startMessage(message):
 @myBot.message_handler(commands=['test'])
 def testMessage(message):
     send_stat()
-    
+
 @myBot.message_handler(commands=['createData'])
 def createData(message):
     client = connectToDB()
@@ -46,9 +46,10 @@ def createData(message):
         db.create_collection("internetData")
     
     currentCollection = db["internetData"]
+    value = os.environ.get("STARTVALUE")
     newDocument = {
         "name": "остаток",
-        "cost": 199
+        "cost": float(value)
     }
     try:
         currentCollection.insert_one(newDocument)
