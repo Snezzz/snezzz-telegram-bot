@@ -44,7 +44,7 @@ def testMessage(message):
     password=password,
     )
     db = client.admin
-    myBot.send_message(message.chat.id, db.collection_names())
+    myBot.send_message(message.chat.id, db.list_collection_names())
 
 
 @myBot.message_handler(content_types=['text'])
