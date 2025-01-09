@@ -102,7 +102,7 @@ def getStatMessage(message):
 
 
 def send_stat():
-    currentStat = get_stat()
+    currentStat = getData()
     message = 'На интернет-счете сегодня: ' + str(currentStat) + ' р.'
     if float(currentStat) < 100.0:
         message+= 'Пора класть деньги!' 
