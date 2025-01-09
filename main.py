@@ -35,10 +35,8 @@ def startMessage(message):
 
 @myBot.message_handler(commands=['test'])
 def testMessage(message):
-    client = connectToDB()
-    db = client.admin
-    myBot.send_message(message.chat.id, db.list_collection_names(include_system_collections=False))
-
+    send_stat()
+    
 @myBot.message_handler(commands=['createData'])
 def createData(message):
     client = connectToDB()
@@ -66,7 +64,10 @@ def getList(message):
     currentCollection = db["internetData"]
     answer = ""
     for doc in currentCollection.find():
-        answer = answer + str(doc["name"]) + " : " + str(doc["cost"])
+        answer = answer + str(doc["name"]) + " : " + str(doc["cost"]) + "\n"
+    if answer = "":
+        answer = "Нет данных"
+
     myBot.send_message(message.chat.id, answer)
     
 @myBot.message_handler(commands=['removeData'])
@@ -104,7 +105,7 @@ def send_stat():
     message = 'На интернет-счете сегодня: ' + str(currentStat) + ' р.'
     if float(currentStat) < 100.0:
         message+= 'Пора класть деньги!' 
-        
+    reduce(currentStat)    
     myBot.send_message(chat_id, message)
 
 def connectToDB():
@@ -136,6 +137,20 @@ def getData():
     currentDoc = currentCollection.find_one({"name": "остаток"})
     lastCost = currentDoc["cost"]
     return lastCost
+
+def reduce(currentValue):
+    everyDayCost = os.environ.get("EVERYDAYCOST")
+    value = float(currentValue) - float(everyDayCost)
+    client = connectToDB()
+    db = client.admin
+    currentCollection = db["internetData"]
+    currentCollection.delete_many({"name": "остаток"}) 
+    newDoc = {
+        "name": "остаток",
+        "cost": value
+    }
+      
+    currentCollection.insert_one(newDoc)
 
 scheduler = BlockingScheduler(timezone="Europe/Moscow") 
 scheduler.add_job(send_stat, "cron", hour=9)
