@@ -44,7 +44,7 @@ def testMessage(message):
     password=password,
     )
     db = client.admin
-    myBot.send_message(message.chat.id, db.list_collection_names())
+    myBot.send_message(message.chat.id, db.list_collection_names(include_system_collections=False))
 
 @myBot.message_handler(commands=['createData'])
 def createData(message):
@@ -57,14 +57,17 @@ def createData(message):
     password=password,
     )
     db = client.admin
-    db.create_collection("internetData")
-    newCollection = db["internetData"]
+    list_of_collections = db.list_collection_names()  # Return a list of collections in 'test_db'
+    if "internetData" not in list_of_collections:
+        db.create_collection("internetData")
+    
+    currentCollection = db["internetData"]
     newDocument = {
         "name": "остаток",
         "cost": 199
     }
-    newCollection.insert_one(newDocument)
-    myBot.send_message(message.chat.id, db.list_collection_names())
+    currentCollection.insert_one(newDocument)
+    myBot.send_message(message.chat.id, db.list_collection_names(include_system_collections=False))
 
 
 @myBot.message_handler(content_types=['text'])
