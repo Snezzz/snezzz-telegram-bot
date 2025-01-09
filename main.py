@@ -35,11 +35,13 @@ def startMessage(message):
 
 @myBot.message_handler(commands=['test'])
 def testMessage(message):
+    userName = os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME")
+    password = os.environ.get("MONGO_MONGO_INITDB_ROOT_PASSWORD")
     client = MongoClient(
     host = 'mongodb://94.26.239.216:22238',
     serverSelectionTimeoutMS = 3000, # 3 second timeout
-    username=os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME"),
-    password=os.environ.get("MONGO_MONGO_INITDB_ROOT_PASSWORD"),
+    username=userName,
+    password=password,
     )
     myBot.send_message(message.chat.id, client.list_database_names())
 
