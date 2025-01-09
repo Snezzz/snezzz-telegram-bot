@@ -46,6 +46,25 @@ def testMessage(message):
     db = client.admin
     myBot.send_message(message.chat.id, db.list_collection_names())
 
+@myBot.message_handler(commands=['createData'])
+def createData(message):
+    userName = os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME")
+    password = os.environ.get("MONGO_MONGO_INITDB_ROOT_PASSWORD")
+    client = MongoClient(
+    host = 'mongodb://94.26.239.216:22238',
+    serverSelectionTimeoutMS = 3000, # 3 second timeout
+    username=userName,
+    password=password,
+    )
+    db = client.admin
+    newCollection = db["internetData"]
+    newDocument = {
+        "name": "остаток",
+        "cost": 199
+    }
+    newCollection.insert_one(newDocument)
+    myBot.send_message(message.chat.id, db.list_collection_names())
+
 
 @myBot.message_handler(content_types=['text'])
 def get_text_messages(message):
