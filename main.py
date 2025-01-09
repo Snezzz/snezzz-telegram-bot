@@ -87,7 +87,7 @@ def getData(message):
     currentCollection = db["internetData"]
     answer = ""
     for x in currentCollection.find():
-        answer = answer + x
+        answer = answer + "\n"+ str(x.cost)
     myBot.send_message(message.from_user.id, str(answer))
 
 @myBot.message_handler(content_types=['text'])
