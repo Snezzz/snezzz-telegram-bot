@@ -66,7 +66,7 @@ def getList(message):
     answer = ""
     for doc in currentCollection.find():
         answer = answer + str(doc["name"]) + " : " + str(doc["cost"]) + "\n"
-    if answer = "":
+    if answer == "":
         answer = "Нет данных"
 
     myBot.send_message(message.chat.id, answer)
