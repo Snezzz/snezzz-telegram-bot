@@ -35,27 +35,13 @@ def startMessage(message):
 
 @myBot.message_handler(commands=['test'])
 def testMessage(message):
-    userName = os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME")
-    password = os.environ.get("MONGO_MONGO_INITDB_ROOT_PASSWORD")
-    client = MongoClient(
-    host = 'mongodb://94.26.239.216:22238',
-    serverSelectionTimeoutMS = 3000, # 3 second timeout
-    username=userName,
-    password=password,
-    )
+    connectToDB()
     db = client.admin
     myBot.send_message(message.chat.id, db.list_collection_names(include_system_collections=False))
 
 @myBot.message_handler(commands=['createData'])
 def createData(message):
-    userName = os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME")
-    password = os.environ.get("MONGO_MONGO_INITDB_ROOT_PASSWORD")
-    client = MongoClient(
-    host = 'mongodb://94.26.239.216:22238',
-    serverSelectionTimeoutMS = 3000, # 3 second timeout
-    username=userName,
-    password=password,
-    )
+    connectToDB()
     db = client.admin
     list_of_collections = db.list_collection_names()  # Return a list of collections in 'test_db'
     if "internetData" not in list_of_collections:
@@ -75,20 +61,27 @@ def createData(message):
 
 @myBot.message_handler(commands=['getData'])
 def getData(message):
-    userName = os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME")
-    password = os.environ.get("MONGO_MONGO_INITDB_ROOT_PASSWORD")
-    client = MongoClient(
-    host = 'mongodb://94.26.239.216:22238',
-    serverSelectionTimeoutMS = 3000, # 3 second timeout
-    username=userName,
-    password=password,
-    )
+    connectToDB()
     db = client.admin
     currentCollection = db["internetData"]
     answer = ""
     for x in currentCollection.find():
         answer = answer + "\n"+ str(x["cost"])
     myBot.send_message(message.from_user.id, str(answer))
+
+
+@myBot.message_handler(commands=['removeData'])
+def removeData(message):
+    connectToDB()
+    db = client.admin
+    currentCollection = db["internetData"]
+    try:
+        currentCollection.remove({"name": "остаток"})
+        myBot.send_message(message.chat.id, 'Я очистил данные')
+    except OSError as err:
+        myBot.send_message(message.chat.id, f"Ошибка в очистке данных {err=}")
+
+
 
 @myBot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -121,6 +114,16 @@ def send_stat():
         message+= 'Пора класть деньги!' 
         
     myBot.send_message(chat_id, message)
+
+def connectToDB():
+    userName = os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME")
+    password = os.environ.get("MONGO_MONGO_INITDB_ROOT_PASSWORD")
+    client = MongoClient(
+    host = 'mongodb://94.26.239.216:22238',
+    serverSelectionTimeoutMS = 3000, # 3 second timeout
+    username=userName,
+    password=password,
+    )
 
 scheduler = BlockingScheduler(timezone="Europe/Moscow") 
 scheduler.add_job(send_stat, "cron", hour=9)
