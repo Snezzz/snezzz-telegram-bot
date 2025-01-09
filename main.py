@@ -43,7 +43,8 @@ def testMessage(message):
     username=userName,
     password=password,
     )
-    myBot.send_message(message.chat.id, client.list_database_names())
+    db = client.admin
+    myBot.send_message(message.chat.id, db.collection_names())
 
 
 @myBot.message_handler(content_types=['text'])
