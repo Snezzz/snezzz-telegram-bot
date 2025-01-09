@@ -66,9 +66,29 @@ def createData(message):
         "name": "остаток",
         "cost": 199
     }
-    currentCollection.insert_one(newDocument)
-    myBot.send_message(message.chat.id, db.list_collection_names(include_system_collections=False))
+    try:
+        currentCollection.insert_one(newDocument)
+        myBot.send_message(message.chat.id, 'Я создал тебе документ')
+    except OSError as err:
+         myBot.send_message(message.chat.id, f"Ошибка в создании документа {err=}")
 
+
+@myBot.message_handler(commands=['getData'])
+def getData(message):
+    userName = os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME")
+    password = os.environ.get("MONGO_MONGO_INITDB_ROOT_PASSWORD")
+    client = MongoClient(
+    host = 'mongodb://94.26.239.216:22238',
+    serverSelectionTimeoutMS = 3000, # 3 second timeout
+    username=userName,
+    password=password,
+    )
+    db = client.admin
+    currentCollection = db["internetData"]
+    answer = ""
+    for x in currentCollection.find():
+        answer = answer + x
+    myBot.send_message(message.from_user.id, str(answer))
 
 @myBot.message_handler(content_types=['text'])
 def get_text_messages(message):
