@@ -114,6 +114,17 @@ def getStatMessage(message):
     myBot.send_message(message.chat.id, f"Сейчас на счету {str(currentValue)} р.")
 
 
+@bot.message_handler(commands = ['meow'])
+def meowFunc(message):
+    url = getUrl()
+    mybot.send_photo(message.chat.id, url)
+
+
+def getUrl():
+    contents = requests.get('https://thatcopy.pw/catapi/rest/').json()
+    image_url = contents['url']
+    return image_url
+
 def send_stat():
     currentStat = round(float(getData()),3)
     message = 'На интернет-счете сегодня: ' + str(currentStat) + ' р.'
@@ -168,6 +179,7 @@ def reduce(currentValue):
 
 scheduler = BlockingScheduler(timezone="Europe/Moscow") 
 scheduler.add_job(send_stat, "cron", hour=9)
+scheduler.add_job(meowFunc, "cron", hour=9)
 
 def schedule_checker():
     
