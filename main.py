@@ -89,14 +89,27 @@ def get_text_messages(message):
     if message.text == '👋 Поздороваться':
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
         btn1 = types.KeyboardButton('Получить остаток интернет-счета')
-        markup.add(btn1)
+        btn2 = types.KeyboardButton('Очистить данные')
+        btn3 = types.KeyboardButton('Протестировать меня')
+        btn4 = types.KeyboardButton('Получить все данные')
+        btn5 = types.KeyboardButton('Создать новые данные')
+        markup.add(btn1,btn2,btn3,btn4,btn5)
         myBot.send_message(message.from_user.id, '❓ Задайте интересующий вас вопрос', reply_markup=markup) #ответ бота
 
     elif message.text == 'Получить остаток интернет-счета':
         getStatMessage(message)
+    elif message.text == 'Очистить данные':
+        removeData(message)
+    elif message.text == 'Протестировать меня':
+        testMessage(message)
+    elif message.text == 'Получить все данные':
+        getList(message)
+    elif message.text == 'Создать новые данные':
+        createData(message)
 
 @myBot.message_handler(commands=['getValue'])
 def getStatMessage(message):
+    
     currentValue = getData()
     myBot.send_message(message.chat.id, f"Сейчас на счету {str(currentValue)} р.")
 
