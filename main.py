@@ -179,7 +179,6 @@ def reduce(currentValue):
 
 scheduler = BlockingScheduler(timezone="Europe/Moscow") 
 scheduler.add_job(send_stat, "cron", hour=9)
-scheduler.add_job(meowFunc, "cron", hour=9)
 
 def schedule_checker():
     
