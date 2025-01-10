@@ -114,7 +114,7 @@ def getStatMessage(message):
     myBot.send_message(message.chat.id, f"Сейчас на счету {str(currentValue)} р.")
 
 
-@bot.message_handler(commands = ['meow'])
+@myBot.message_handler(commands = ['meow'])
 def meowFunc(message):
     url = getUrl()
     mybot.send_photo(message.chat.id, url)
