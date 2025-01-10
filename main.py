@@ -110,7 +110,7 @@ def get_text_messages(message):
 @myBot.message_handler(commands=['getValue'])
 def getStatMessage(message):
     
-    currentValue = getData()
+    currentValue = round(float(getData()),3)
     myBot.send_message(message.chat.id, f"Сейчас на счету {str(currentValue)} р.")
 
 
