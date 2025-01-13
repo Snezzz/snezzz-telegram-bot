@@ -63,7 +63,7 @@ def get_text_messages(message):
     elif message.text == 'Создать новые данные':
         createData(message)
     else: 
-        setTaskCompleted(message.text)
+        setTaskCompleted(message)
 
 
 @myBot.message_handler(commands=['test'])
@@ -102,12 +102,12 @@ def setTask(message):
     except OSError as err:
         myBot.send_message(message.chat.id, f"Ошибка в создании задачи {err=}")
 
-def setTaskCompleted(text):
+def setTaskCompleted(message):
     client = connectToDB()
     db = client.admin
     currentCollection = db["myTasks"]
     query = {
-        "text": text
+        "text": message.text
     }
    
     try:
