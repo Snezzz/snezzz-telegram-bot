@@ -47,6 +47,7 @@ def get_text_messages(message):
         markup.add(btn1,btn2,btn3,btn4,btn5)
         myBot.send_message(message.from_user.id, '❓ Задайте интересующий вас вопрос', reply_markup=markup) #ответ бота
     elif message.text == 'Пометить задачу выполненной':
+        client = connectToDB()
         db = client.admin
         currentCollection = db["myTasks"]
         for task in currentCollection.find():
