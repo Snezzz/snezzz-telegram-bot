@@ -102,6 +102,7 @@ def setTask(message):
         myBot.send_message(message.chat.id, f"Ошибка в создании задачи {err=}")
 
 def setTaskCompleted(text):
+    client = connectToDB()
     db = client.admin
     currentCollection = db["myTasks"]
     query = {
