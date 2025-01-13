@@ -112,7 +112,7 @@ def setTaskCompleted(text):
    
     try:
         doc = currentCollection.find_one(query)
-        if doc <> {}:
+        if len(doc) != 0:
             docID = doc["_id"]
             currentCollection.find_one_and_update(
             {"_id" : ObjectId("")},
