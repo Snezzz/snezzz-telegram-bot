@@ -62,8 +62,8 @@ def get_text_messages(message):
         getList(message)
     elif message.text == 'Создать новые данные':
         createData(message)
-    else: 
-        setTaskCompleted(message)
+    #else: 
+     #   setTaskCompleted(message)
 
 
 @myBot.message_handler(commands=['test'])
