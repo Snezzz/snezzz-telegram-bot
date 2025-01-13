@@ -112,12 +112,15 @@ def setTaskCompleted(text):
    
     try:
         doc = currentCollection.find_one(query)
-        #docID = doc["_id"]
-        currentCollection.find_one_and_update(
-        {"_id" : ObjectId("")},
-        {"$set":
-        {"completed": True}},upsert=True)
-        myBot.send_message(message.chat.id, 'Я пометил задачу как выполненная')
+        if doc <> {}:
+            docID = doc["_id"]
+            currentCollection.find_one_and_update(
+            {"_id" : ObjectId("")},
+            {"$set":
+            {"completed": True}},upsert=True)
+            myBot.send_message(message.chat.id, 'Я пометил задачу как выполненная')
+        else:
+            myBot.send_message(message.chat.id, 'Задача не найдена')
     except OSError as err:
          myBot.send_message(message.chat.id, f"Ошибка в обновлении задачи {err=}")
 
