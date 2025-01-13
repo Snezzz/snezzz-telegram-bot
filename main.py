@@ -111,9 +111,9 @@ def setTaskCompleted(text):
    
     try:
         doc = currentCollection.find_one(query)
-        docID = doc["_id"]
+        #docID = doc["_id"]
         currentCollection.find_one_and_update(
-        {"_id" : ObjectId(docID)},
+        {"_id" : ObjectId("")},
         {"$set":
         {"completed": True}},upsert=True)
         myBot.send_message(message.chat.id, 'Я пометил задачу как выполненная')
