@@ -5,10 +5,12 @@ import pymongo
 import time
 import os
 import logging
+import bson
 from apscheduler.schedulers.blocking import BlockingScheduler
 from threading import Thread
 from telebot import types
 from pymongo import MongoClient
+from bson import ObjectId
 
 message_time = os.environ.get("TIME")
 chat_id = os.environ.get("CHAT_ID")
