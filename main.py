@@ -5,7 +5,6 @@ import pymongo
 import time
 import os
 import logging
-import bson
 from apscheduler.schedulers.blocking import BlockingScheduler
 from threading import Thread
 from telebot import types
