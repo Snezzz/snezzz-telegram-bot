@@ -34,39 +34,6 @@ def startMessage(message):
     markup.add(btn1, btn2)
     myBot.send_message(message.chat.id, "Привет! Я твой бот-помощник", reply_markup=markup)
 
-@myBot.message_handler(content_types=['text'])
-def get_text_messages(message):
-
-    if message.text == '👋 Поздороваться':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
-        btn1 = types.KeyboardButton('Получить остаток интернет-счета')
-        btn2 = types.KeyboardButton('Очистить данные')
-        btn3 = types.KeyboardButton('Протестировать меня')
-        btn4 = types.KeyboardButton('Получить все данные')
-        btn5 = types.KeyboardButton('Создать новые данные')
-        markup.add(btn1,btn2,btn3,btn4,btn5)
-        myBot.send_message(message.from_user.id, '❓ Задайте интересующий вас вопрос', reply_markup=markup) #ответ бота
-    elif message.text == 'Пометить задачу выполненной':
-        client = connectToDB()
-        db = client.admin
-        currentCollection = db["myTasks"]
-        for task in currentCollection.find():
-            btn = types.KeyboardButton(task["text"])
-            markup.add(btn)
-    elif message.text == 'Получить остаток интернет-счета':
-        getStatMessage(message)
-    elif message.text == 'Очистить данные':
-        removeData(message)
-    elif message.text == 'Протестировать меня':
-        testMessage(message)
-    elif message.text == 'Получить все данные':
-        getList(message)
-    elif message.text == 'Создать новые данные':
-        createData(message)
-    #else: 
-     #   setTaskCompleted(message)
-
-
 @myBot.message_handler(commands=['test'])
 def testMessage(message):
     send_stat()
@@ -281,6 +248,39 @@ def getUrl():
     contents = requests.get('https://thatcopy.pw/catapi/rest/').json()
     image_url = contents['url']
     return image_url
+
+
+@myBot.message_handler(content_types=['text'])
+def get_text_messages(message):
+
+    if message.text == '👋 Поздороваться':
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
+        btn1 = types.KeyboardButton('Получить остаток интернет-счета')
+        btn2 = types.KeyboardButton('Очистить данные')
+        btn3 = types.KeyboardButton('Протестировать меня')
+        btn4 = types.KeyboardButton('Получить все данные')
+        btn5 = types.KeyboardButton('Создать новые данные')
+        markup.add(btn1,btn2,btn3,btn4,btn5)
+        myBot.send_message(message.from_user.id, '❓ Задайте интересующий вас вопрос', reply_markup=markup) #ответ бота
+    elif message.text == 'Получить остаток интернет-счета':
+        getStatMessage(message)
+    elif message.text == 'Очистить данные':
+        removeData(message)
+    elif message.text == 'Протестировать меня':
+        testMessage(message)
+    elif message.text == 'Получить все данные':
+        getList(message)
+    elif message.text == 'Создать новые данные':
+        createData(message)
+    elif message.text == 'Пометить задачу выполненной':
+        client = connectToDB()
+        db = client.admin
+        currentCollection = db["myTasks"]
+        for task in currentCollection.find():
+            btn = types.KeyboardButton(task["text"])
+            markup.add(btn)
+    #else: 
+     #   setTaskCompleted(message)
 
 def connectToDB():
     userName = os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME")
