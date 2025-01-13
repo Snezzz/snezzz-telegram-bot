@@ -276,6 +276,7 @@ def get_text_messages(message):
         client = connectToDB()
         db = client.admin
         currentCollection = db["myTasks"]
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
         for task in currentCollection.find():
             btn = types.KeyboardButton(task["text"])
             markup.add(btn)
