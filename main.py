@@ -58,7 +58,7 @@ def createTask(message):
     arrTasks = []
     for task in message.text.split("\n"):
         taskToCreate = task.replace("Task:","").strip()
-        arrTasks.add(taskToCreate)
+        arrTasks.append(taskToCreate)
     
     client = connectToDB()
     db = client.admin
