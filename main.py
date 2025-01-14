@@ -29,7 +29,8 @@ myBot = telebot.TeleBot(os.environ.get("TOKEN"))
 @myBot.message_handler(commands=['start'])
 def startMessage(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn1 = types.KeyboardButton("💰Получить информацию про иинтернет-счет")
+    btn1 = types.KeyboardButton("🕵️‍♂️Получить информацию про интернет-счет")
+    btn4 = types.KeyboardButton("📜Мои задачи")
     btn2 = types.KeyboardButton("🎲Добавить задачи")
     btn3 = types.KeyboardButton("😊Пометить задачу выполненной")
     btn4 = types.KeyboardButton("😢Удалить задачу")
@@ -139,6 +140,9 @@ def getAllTasks(message):
 
 @myBot.message_handler(commands=['getActualTasks'])
 def getActualTasks(message):
+    getTasksList(message)
+
+def getTasksList(message):
     client = connectToDB()
     db = client.admin
     currentCollection = db["myTasks"]
@@ -176,6 +180,7 @@ def fillMarkup(typeAction):
         btn = types.KeyboardButton(typeAction+task["text"])
         markup.add(btn)
     return markup
+
 ###################################################
 ################# /Tasks collection ###############
 ###################################################
@@ -291,7 +296,7 @@ def getUrl():
 @myBot.message_handler(content_types=['text'])
 def get_text_messages(message):
 
-    if message.text == '💰Получить информацию про иинтернет-счет':
+    if message.text == '🕵️‍♂️Получить информацию про интернет-счет':
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
         btn1 = types.KeyboardButton('Получить остаток интернет-счета')
         btn2 = types.KeyboardButton('Очистить данные')
@@ -302,6 +307,8 @@ def get_text_messages(message):
         myBot.send_message(message.from_user.id, '❓ Задайте интересующий вас вопрос', reply_markup=markup) #ответ бота
     elif message.text == 'Получить остаток интернет-счета':
         getStatMessage(message)
+    elif message.text == '📜Мои задачи':
+        getTasksList(message)
     elif message.text == '🎲Добавить задачи':
         myBot.send_message(message.from_user.id, "❓Введи задачи в формате 'Task: задача'")
     elif message.text == 'Очистить данные':
