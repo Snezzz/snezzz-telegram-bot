@@ -30,6 +30,7 @@ myBot = telebot.TeleBot(os.environ.get("TOKEN"))
 def startMessage(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     btn1 = types.KeyboardButton("👋Поздороваться")
+    btn2 = types.KeyboardButton("🎲Добавить задачи")
     btn2 = types.KeyboardButton("😊Пометить задачу выполненной")
     markup.add(btn1, btn2)
     myBot.send_message(message.chat.id, "Привет! Я твой бот-помощник", reply_markup=markup)
@@ -262,7 +263,7 @@ def getUrl():
 @myBot.message_handler(content_types=['text'])
 def get_text_messages(message):
 
-    if message.text == '👋 Поздороваться':
+    if message.text == '👋Поздороваться':
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
         btn1 = types.KeyboardButton('Получить остаток интернет-счета')
         btn2 = types.KeyboardButton('Очистить данные')
@@ -273,7 +274,7 @@ def get_text_messages(message):
         myBot.send_message(message.from_user.id, '❓ Задайте интересующий вас вопрос', reply_markup=markup) #ответ бота
     elif message.text == 'Получить остаток интернет-счета':
         getStatMessage(message)
-    elif message.text == 'Добавить задачи':
+    elif message.text == '🎲Добавить задачи':
         myBot.send_message(message.from_user.id, "❓Введи задачи в формате 'Task: задача'",reply_markup=markup)
     elif message.text == 'Очистить данные':
         removeData(message)
@@ -283,7 +284,7 @@ def get_text_messages(message):
         getList(message)
     elif message.text == 'Создать новые данные':
         createData(message)
-    elif message.text == 'Пометить задачу выполненной':
+    elif message.text == '😊Пометить задачу выполненной':
         client = connectToDB()
         db = client.admin
         currentCollection = db["myTasks"]
