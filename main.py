@@ -280,6 +280,8 @@ def get_text_messages(message):
         for task in currentCollection.find():
             btn = types.KeyboardButton(task["text"])
             markup.add(btn)
+        myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup) #ответ бота
+  
     #else: 
      #   setTaskCompleted(message)
 
