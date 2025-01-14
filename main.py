@@ -275,7 +275,7 @@ def get_text_messages(message):
     elif message.text == 'Получить остаток интернет-счета':
         getStatMessage(message)
     elif message.text == '🎲Добавить задачи':
-        myBot.send_message(message.from_user.id, "❓Введи задачи в формате 'Task: задача'",reply_markup=markup)
+        myBot.send_message(message.from_user.id, "❓Введи задачи в формате 'Task: задача'")
     elif message.text == 'Очистить данные':
         removeData(message)
     elif message.text == 'Протестировать меня':
