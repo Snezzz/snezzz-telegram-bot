@@ -83,7 +83,7 @@ def setTaskCompleted(message):
         if doc != None:
             docID = doc["_id"]
             currentCollection.find_one_and_update(
-            {"_id" : ObjectId("")},
+            {"_id" : ObjectId(docID)},
             {"$set":
             {"completed": True}},upsert=True)
             myBot.send_message(message.chat.id, 'Я пометил задачу как выполненная')
@@ -278,7 +278,7 @@ def get_text_messages(message):
         currentCollection = db["myTasks"]
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
         for task in currentCollection.find():
-            btn = types.KeyboardButton("-"+task["text"])
+            btn = types.KeyboardButton("- "+task["text"])
             markup.add(btn)
         myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup) #ответ бота
   
