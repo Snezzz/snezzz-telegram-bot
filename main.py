@@ -312,9 +312,11 @@ def get_text_messages(message):
     elif message.text == 'Создать новые данные':
         createData(message)
     elif message.text == '😊Пометить задачу выполненной':
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         fillMarkup(markup, "ToDo: ")
         myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup) #ответ бота
     elif message.text == '😢Удалить задачу':
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         fillMarkup(markup, "ToRemove: ")
         myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup)
     elif "Task" in message.text: 
