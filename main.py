@@ -79,7 +79,7 @@ def setTaskCompleted(message):
     }
    
     try:
-        doc = currentCollection.find_one(query)
+        doc = currentCollection.find_one({"text": "ex"})
         if doc != None:
             docID = doc["_id"]
             currentCollection.find_one_and_update(
