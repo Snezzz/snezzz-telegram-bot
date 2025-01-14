@@ -72,7 +72,7 @@ def setTask(message):
 
 def setTaskCompleted(message):
     
-    taskToFind = strip(message.text.replace("ToDo: ", ""))
+    taskToFind = message.text.replace("ToDo: ", "").strip()
     client = connectToDB()
     db = client.admin
     currentCollection = db["myTasks"]
