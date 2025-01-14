@@ -29,8 +29,8 @@ myBot = telebot.TeleBot(os.environ.get("TOKEN"))
 @myBot.message_handler(commands=['start'])
 def startMessage(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn1 = types.KeyboardButton("👋 Поздороваться")
-    btn2 = types.KeyboardButton("Пометить задачу выполненной")
+    btn1 = types.KeyboardButton("👋Поздороваться")
+    btn2 = types.KeyboardButton("😊Пометить задачу выполненной")
     markup.add(btn1, btn2)
     myBot.send_message(message.chat.id, "Привет! Я твой бот-помощник", reply_markup=markup)
 
@@ -53,22 +53,33 @@ def createTasksCollection(message):
         except OSError as err:
          myBot.send_message(message.chat.id, f"Ошибка при создании коллекции {err=}")
 
-@myBot.message_handler(commands=['setTask'])
-def setTask(message):
+@bot.message_handler(func=lambda m: True)
+def echo_all(message):
+	bot.reply_to(message, message.text)
+
+def createTask(message):
+    arrTasks = []
+    for task in message.text.split("\n"):
+        taskToCreate = task.replace("Task:","").strip()
+        arrTasks.add(taskToCreate)
+    
     client = connectToDB()
     db = client.admin
     currentCollection = db["myTasks"]
-    documentsCount = currentCollection.count_documents({})
-    newDocument = {
-        "number": (documentsCount + 1),
-        "text": "ex",
-        "completed": False
-    }
+    number = currentCollection.count_documents({}) + 1
+    for task in arrTasks:
+        newDocument = {
+            "number": number,
+            "text": task,
+            "completed": False
+        }
+        number+=1
+  
     try:
-        currentCollection.insert_one(newDocument)
-        myBot.send_message(message.chat.id, 'Я создал тебе задачу')
+        currentCollection.insert_many(newDocument)
+        myBot.send_message(message.chat.id, 'Я создал тебе задачи')
     except OSError as err:
-        myBot.send_message(message.chat.id, f"Ошибка в создании задачи {err=}")
+        myBot.send_message(message.chat.id, f"Ошибка в создании задач {err=}")
 
 def setTaskCompleted(message):
     
@@ -266,6 +277,8 @@ def get_text_messages(message):
         myBot.send_message(message.from_user.id, '❓ Задайте интересующий вас вопрос', reply_markup=markup) #ответ бота
     elif message.text == 'Получить остаток интернет-счета':
         getStatMessage(message)
+    elif message.text == 'Добавить задачи':
+        myBot.send_message(message.from_user.id, "❓Введи задачи в формате 'Task: задача'",reply_markup=markup)
     elif message.text == 'Очистить данные':
         removeData(message)
     elif message.text == 'Протестировать меня':
@@ -283,7 +296,8 @@ def get_text_messages(message):
             btn = types.KeyboardButton("ToDo: "+task["text"])
             markup.add(btn)
         myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup) #ответ бота
-  
+    elif "Task" in message.text: 
+        createTask(message)
     elif "ToDo" in message.text: 
         setTaskCompleted(message)
 
