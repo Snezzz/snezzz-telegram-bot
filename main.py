@@ -167,7 +167,7 @@ def getCompletedTasks(message):
 
     myBot.send_message(message.chat.id, answer)
 
-def fillMarkup(markup, typeAction):
+def fillMarkup(typeAction):
     client = connectToDB()
     db = client.admin
     currentCollection = db["myTasks"]
@@ -175,6 +175,7 @@ def fillMarkup(markup, typeAction):
     for task in currentCollection.find():
         btn = types.KeyboardButton(typeAction+task["text"])
     markup.add(btn)
+    return markup
 ###################################################
 ################# /Tasks collection ###############
 ###################################################
@@ -312,12 +313,10 @@ def get_text_messages(message):
     elif message.text == 'Создать новые данные':
         createData(message)
     elif message.text == '😊Пометить задачу выполненной':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        fillMarkup(markup, "ToDo: ")
+        markup =  fillMarkup("ToDo: ")
         myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup) #ответ бота
     elif message.text == '😢Удалить задачу':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        fillMarkup(markup, "ToRemove: ")
+        markup = fillMarkup("ToRemove: ")
         myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup)
     elif "Task" in message.text: 
         createTask(message)
