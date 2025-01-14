@@ -31,8 +31,8 @@ def startMessage(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     btn1 = types.KeyboardButton("👋Поздороваться")
     btn2 = types.KeyboardButton("🎲Добавить задачи")
-    btn2 = types.KeyboardButton("😊Пометить задачу выполненной")
-    markup.add(btn1, btn2)
+    btn3 = types.KeyboardButton("😊Пометить задачу выполненной")
+    markup.add(btn1, btn2, btn3)
     myBot.send_message(message.chat.id, "Привет! Я твой бот-помощник", reply_markup=markup)
 
 @myBot.message_handler(commands=['test'])
