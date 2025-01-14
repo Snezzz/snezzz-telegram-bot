@@ -61,9 +61,8 @@ def removeTask(message):
     db = client.admin
     currentCollection = db['myTasks']
     taskToFind = message.text.replace("ToRemove: ", "").strip()
-    myBot.send_message(message.chat.id, taskToFind)
     try:
-        query = {"name": taskToFind}
+        query = {"text": taskToFind}
         doc = currentCollection.find_one(query)
         if doc != None:
             docID = doc["_id"]
