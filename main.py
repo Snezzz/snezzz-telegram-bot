@@ -174,7 +174,7 @@ def fillMarkup(typeAction):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
     for task in currentCollection.find():
         btn = types.KeyboardButton(typeAction+task["text"])
-    markup.add(btn)
+        markup.add(btn)
     return markup
 ###################################################
 ################# /Tasks collection ###############
