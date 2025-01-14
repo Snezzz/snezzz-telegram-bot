@@ -71,15 +71,17 @@ def setTask(message):
         myBot.send_message(message.chat.id, f"Ошибка в создании задачи {err=}")
 
 def setTaskCompleted(message):
+    
+    taskToFind = strip(message.text.replace("ToDo: ", ""))
     client = connectToDB()
     db = client.admin
     currentCollection = db["myTasks"]
     query = {
-        "text": message.text
+        "text": taskToFind
     }
    
     try:
-        doc = currentCollection.find_one({"text": "ex"})
+        doc = currentCollection.find_one(query)
         if doc != None:
             docID = doc["_id"]
             currentCollection.find_one_and_update(
@@ -278,11 +280,11 @@ def get_text_messages(message):
         currentCollection = db["myTasks"]
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
         for task in currentCollection.find():
-            btn = types.KeyboardButton("- "+task["text"])
+            btn = types.KeyboardButton("ToDo: "+task["text"])
             markup.add(btn)
         myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup) #ответ бота
   
-    elif "-" in message.text: 
+    elif "ToDo" in message.text: 
         setTaskCompleted(message)
 
 def connectToDB():
