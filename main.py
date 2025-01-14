@@ -278,12 +278,12 @@ def get_text_messages(message):
         currentCollection = db["myTasks"]
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
         for task in currentCollection.find():
-            btn = types.KeyboardButton(task["text"])
+            btn = types.KeyboardButton("-"+task["text"])
             markup.add(btn)
         myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup) #ответ бота
   
-    #else: 
-     #   setTaskCompleted(message)
+    elif "-" in message.text: 
+        setTaskCompleted(message)
 
 def connectToDB():
     userName = os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME")
