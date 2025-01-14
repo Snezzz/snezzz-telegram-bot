@@ -29,10 +29,11 @@ myBot = telebot.TeleBot(os.environ.get("TOKEN"))
 @myBot.message_handler(commands=['start'])
 def startMessage(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn1 = types.KeyboardButton("👋Поздороваться")
+    btn1 = types.KeyboardButton("💰Получить информацию про иинтернет-счет")
     btn2 = types.KeyboardButton("🎲Добавить задачи")
     btn3 = types.KeyboardButton("😊Пометить задачу выполненной")
-    markup.add(btn1, btn2, btn3)
+    btn4 = types.KeyboardButton("😢Удалить задачу")
+    markup.add(btn1, btn2, btn3, btn4)
     myBot.send_message(message.chat.id, "Привет! Я твой бот-помощник", reply_markup=markup)
 
 @myBot.message_handler(commands=['test'])
@@ -53,6 +54,25 @@ def createTasksCollection(message):
          myBot.send_message(message.chat.id, 'Я создал коллекцию задач')
         except OSError as err:
          myBot.send_message(message.chat.id, f"Ошибка при создании коллекции {err=}")
+
+@myBot.message_handler(commands=['removeTask'])
+def removeTask(message):
+    client = connectToDB()
+    db = client.admin
+    currentCollection = db['myTasks']
+    taskToFind = message.text.replace("ToRemove: ", "").strip()
+    try:
+        query = {"name": taskToFind}
+        doc = currentCollection.find_one(query)
+        if doc != None:
+            docID = doc["_id"]
+            currentCollection.find_one_and_delete(
+            {"_id" : ObjectId(docID)})
+            myBot.send_message(message.chat.id, 'Я удалил задачу')
+        else:
+            myBot.send_message(message.chat.id, 'Задача не найдена')
+    except OSError as err:
+         myBot.send_message(message.chat.id, f"Ошибка при удалении задачи {err=}")
 
 def createTask(message):
     client = connectToDB()
@@ -147,6 +167,14 @@ def getCompletedTasks(message):
 
     myBot.send_message(message.chat.id, answer)
 
+def fillMarkup(markup, typeAction):
+    client = connectToDB()
+    db = client.admin
+    currentCollection = db["myTasks"]
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
+    for task in currentCollection.find():
+        btn = types.KeyboardButton(typeAction+task["text"])
+    markup.add(btn)
 ###################################################
 ################# /Tasks collection ###############
 ###################################################
@@ -262,7 +290,7 @@ def getUrl():
 @myBot.message_handler(content_types=['text'])
 def get_text_messages(message):
 
-    if message.text == '👋Поздороваться':
+    if message.text == '💰Получить информацию про иинтернет-счет':
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
         btn1 = types.KeyboardButton('Получить остаток интернет-счета')
         btn2 = types.KeyboardButton('Очистить данные')
@@ -284,18 +312,17 @@ def get_text_messages(message):
     elif message.text == 'Создать новые данные':
         createData(message)
     elif message.text == '😊Пометить задачу выполненной':
-        client = connectToDB()
-        db = client.admin
-        currentCollection = db["myTasks"]
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True) #создание новых кнопок
-        for task in currentCollection.find():
-            btn = types.KeyboardButton("ToDo: "+task["text"])
-            markup.add(btn)
+        fillMarkup(markup, "ToDo: ")
         myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup) #ответ бота
+    elif message.text == '😢Удалить задачу':
+        fillMarkup(markup, "ToRemove: ")
+        myBot.send_message(message.from_user.id, 'Выбери задачу', reply_markup=markup)
     elif "Task" in message.text: 
         createTask(message)
     elif "ToDo" in message.text: 
         setTaskCompleted(message)
+    elif "ToRemove" in message.text: 
+        removeTask(message)
 
 def connectToDB():
     userName = os.environ.get("MONGO_MONGO_INITDB_ROOT_USERNAME")
