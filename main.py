@@ -55,25 +55,24 @@ def createTasksCollection(message):
          myBot.send_message(message.chat.id, f"Ошибка при создании коллекции {err=}")
 
 def createTask(message):
-    arrTasks = []
-    for task in message.text.split("\n"):
-        taskToCreate = task.replace("Task:","").strip()
-        arrTasks.append(taskToCreate)
-    
     client = connectToDB()
     db = client.admin
     currentCollection = db["myTasks"]
     number = currentCollection.count_documents({}) + 1
-    for task in arrTasks:
+
+    arrTasks = []
+    for task in message.text.split("\n"):
+        taskToCreate = task.replace("Task:","").strip()
         newDocument = {
             "number": number,
-            "text": task,
+            "text": taskToCreate,
             "completed": False
         }
+        arrTasks.append(newDocument)
         number+=1
   
     try:
-        currentCollection.insert_many(newDocument)
+        currentCollection.insert_many(arrTasks)
         myBot.send_message(message.chat.id, 'Я создал тебе задачи')
     except OSError as err:
         myBot.send_message(message.chat.id, f"Ошибка в создании задач {err=}")
