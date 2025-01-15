@@ -292,7 +292,6 @@ def getUrl():
     image_url = contents['url']
     return image_url
 
-
 @myBot.message_handler(content_types=['text'])
 def get_text_messages(message):
 
