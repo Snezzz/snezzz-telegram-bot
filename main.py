@@ -239,10 +239,11 @@ def getStatMessage(message):
 
 def send_stat():
     currentStat = round(float(getData()),3)
+    reduce(currentStat)
+    currentStat = round(float(getData()),3)
     message = 'На интернет-счете сегодня: ' + str(currentStat) + ' р.'
     if float(currentStat) < 100.0:
-        message+= '\n'+'Пора класть деньги!' 
-    reduce(currentStat)    
+        message+= '\n'+'Пора класть деньги!'    
     myBot.send_message(chat_id, message)
 
 def dataUpdate():
