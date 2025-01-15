@@ -75,6 +75,41 @@ def removeTask(message):
     except OSError as err:
          myBot.send_message(message.chat.id, f"Ошибка при удалении задачи {err=}")
 
+@myBot.message_handler(commands=['getAllTasks'])
+def getAllTasks(message):
+    client = connectToDB()
+    db = client.admin
+    currentCollection = db["myTasks"]
+    answer = ""
+    for task in currentCollection.find():
+        answer = answer + str(task["number"]) + ". " + str(task["text"])
+        if task["completed"]:
+            answer += " (выполнена)"
+        answer += "\n"
+    if answer == "":
+        answer = "Нет данных"
+
+    myBot.send_message(message.chat.id, answer)
+
+@myBot.message_handler(commands=['getActualTasks'])
+def getActualTasks(message):
+    getTasksList(message)
+
+@myBot.message_handler(commands=['getCompletedTasks'])
+def getCompletedTasks(message):
+    client = connectToDB()
+    db = client.admin
+    currentCollection = db["myTasks"]
+    answer = ""
+    for task in currentCollection.find():
+        if task['completed']:
+            answer = answer + str(task["number"]) + ". " + str(task["text"]) + "\n"
+    
+    if answer == "":
+        answer = "Нет данных"
+
+    myBot.send_message(message.chat.id, answer)
+
 def createTask(message):
     client = connectToDB()
     db = client.admin
@@ -122,26 +157,6 @@ def setTaskCompleted(message):
     except OSError as err:
          myBot.send_message(message.chat.id, f"Ошибка в обновлении задачи {err=}")
 
-@myBot.message_handler(commands=['getAllTasks'])
-def getAllTasks(message):
-    client = connectToDB()
-    db = client.admin
-    currentCollection = db["myTasks"]
-    answer = ""
-    for task in currentCollection.find():
-        answer = answer + str(task["number"]) + ". " + str(task["text"])
-        if task["completed"]:
-            answer += " (выполнена)"
-        answer += "\n"
-    if answer == "":
-        answer = "Нет данных"
-
-    myBot.send_message(message.chat.id, answer)
-
-@myBot.message_handler(commands=['getActualTasks'])
-def getActualTasks(message):
-    getTasksList(message)
-
 def getTasksList(message):
     client = connectToDB()
     db = client.admin
@@ -149,21 +164,6 @@ def getTasksList(message):
     answer = ""
     for task in currentCollection.find():
         if not task['completed']:
-            answer = answer + str(task["number"]) + ". " + str(task["text"]) + "\n"
-    
-    if answer == "":
-        answer = "Нет данных"
-
-    myBot.send_message(message.chat.id, answer)
-
-@myBot.message_handler(commands=['getCompletedTasks'])
-def getCompletedTasks(message):
-    client = connectToDB()
-    db = client.admin
-    currentCollection = db["myTasks"]
-    answer = ""
-    for task in currentCollection.find():
-        if task['completed']:
             answer = answer + str(task["number"]) + ". " + str(task["text"]) + "\n"
     
     if answer == "":
