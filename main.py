@@ -344,7 +344,7 @@ def connectToDB():
     return client
 
 scheduler = BlockingScheduler(timezone="Europe/Moscow") 
-scheduler.add_job(send_stat, "cron", hour=9)
+scheduler.add_job(send_stat, "cron", hour=11)
 
 def schedule_checker():
     
