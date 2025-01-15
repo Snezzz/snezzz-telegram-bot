@@ -13,6 +13,7 @@ from bson import ObjectId
 
 message_time = os.environ.get("TIME")
 chat_id = os.environ.get("CHAT_ID")
+noticeTime = os.environ.get("NOTICE_TIME")
 
 # Enable logging
 logging.basicConfig(
@@ -344,7 +345,7 @@ def connectToDB():
     return client
 
 scheduler = BlockingScheduler(timezone="Europe/Moscow") 
-scheduler.add_job(send_stat, "cron", hour=11)
+scheduler.add_job(send_stat, "cron", hour=noticeTime)
 
 def schedule_checker():
     
